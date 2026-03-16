@@ -13,7 +13,7 @@ ENV UV_PYTHON_DOWNLOADS=0
 # Copy files instead of symlinking (required with --mount=type=cache):
 ENV UV_LINK_MODE=copy
 # Don't include dev dependencies in the runtime image:
-ENV UV_DEV=0
+ENV UV_NO_DEV=1
 
 # Create the virtualenv in /venv so it can be cleanly copied to the final image:
 RUN --mount=type=cache,target=/root/.cache uv venv /venv
@@ -26,12 +26,12 @@ WORKDIR /app
 # This layer is cached as long as pyproject.toml and uv.lock don't change.
 COPY pyproject.toml uv.lock .python-version ./
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-dev --no-install-project
+    uv sync --locked --no-install-project
 
 # Now copy the source and install the package:
 COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-dev
+    uv sync --locked
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
 # Minimal image: Python slim + tini + the /venv copied from the build stage.
