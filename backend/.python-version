@@ -1,0 +1,2 @@
+# If you change the Python version here remember to update it in Dockerfile
+3.14

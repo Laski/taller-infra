@@ -1,0 +1,24 @@
+# Control de versiones
+.git/
+.gitignore
+
+# Docs y config que no van al contenedor
+AGENTS.md
+Dockerfile
+.dockerignore
+
+
+# Entornos virtuales locales
+.venv/
+venv/
+
+# Bytecode y artefactos de Python
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Variables de entorno locales (nunca al contenedor)
+.env
+.env.*
