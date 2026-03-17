@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  lint:
+    desc: Lint with ESLint
+    cmds:
+      - pnpm exec eslint .
+
+  format:
+    desc: Format with prettier
+    cmds:
+      - pnpm exec prettier --write .
+
+  typecheck:
+    desc: Check TypeScript types
+    cmds:
+      - pnpm exec tsc --noEmit
+
+  dev:
+    desc: Start local dev server (Vite, no Docker)
+    cmds:
+      - pnpm exec vite
+
+  build:
+    desc: Build the Docker image
+    cmds:
+      - docker compose build
+
+  up:
+    desc: Start with Docker (nginx serving the built bundle)
+    cmds:
+      - task: build
+      - docker compose up

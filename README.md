@@ -24,9 +24,9 @@ No authentication, sessions, or WebSockets.
 ## Getting started
 
 ```bash
-pre-commit install # install git hooks
-task init          # copies .env.example → .env for each sub-project
-task up            # build and start the full stack with docker-compose
+task init
+pre-commit install --hook-type pre-commit --hook-type pre-push
+task up
 ```
 
 | Service     | URL                   |
@@ -45,16 +45,18 @@ cd frontend && task up  # frontend only
 ## Task
 
 ```
-task init          Set up env files
-task up            Build and start the full stack
-task test          Run backend tests against Postgres
-task pre-commit    Lint + format checks (also runs on git commit)
-task format-yaml   Format all YAML files with prettier
+task init              Set up env files + install deps
+task sync              Install all dependencies (uv + pnpm)
+task up                Build and start the full stack
+task test              Run all backend tests (SQLite + Postgres)
+task pre-commit        Lint + format (runs on git commit)
+task pre-push          Full test suite (runs on git push)
+task format-prettier   Format all files with prettier
 
 task backend:test          Tests against SQLite in-memory
 task backend:test-postgres Tests against real Postgres
 task backend:lint          Ruff lint
-task backend:format        Ruff format
+task backend:format        Ruff format + isort
 task backend:serve         Local dev server with hot reload
 task backend:build         Build the Docker image
 ```

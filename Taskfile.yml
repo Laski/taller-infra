@@ -6,6 +6,9 @@ includes:
   backend:
     taskfile: ./backend/Taskfile.yml
     dir: ./backend
+  frontend:
+    taskfile: ./frontend/Taskfile.yml
+    dir: ./frontend
 
 tasks:
   init:
@@ -23,10 +26,10 @@ tasks:
   pre-commit:
     desc: Git pre-commit checks
     cmds:
-      - task: backend:format
+      - task: format
       - task: backend:lint
-      - task: backend:isort
-      - task: format-prettier
+      #- task: frontend:lint
+      - task: frontend:typecheck
 
   pre-push:
     desc: Git pre-push checks
@@ -44,6 +47,12 @@ tasks:
     desc: Format all files with prettier
     cmds:
       - pnpm dlx prettier --write --log-level silent .
+
+  format:
+    desc: Format all files
+    cmds:
+      - task: backend:format
+      - task: frontend:format
 
   up:
     desc: Build and start the full stack
