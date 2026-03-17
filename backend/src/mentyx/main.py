@@ -26,7 +26,7 @@ app = FastAPI(title="Mentyx", lifespan=lifespan)
 cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
 
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # ty: ignore[invalid-argument-type]  # Starlette typing issue
     allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],

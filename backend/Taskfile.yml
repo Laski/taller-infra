@@ -1,32 +1,55 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 
 version: "3"
-
+method: timestamp
 tasks:
   lint:
     desc: Lint with ruff
+    sources:
+      - src/**/*.py
+      - tests/**/*.py
     cmds:
       - uv run ruff check --fix .
 
   format:
     desc: Format with ruff
+    sources:
+      - src/**/*.py
+      - tests/**/*.py
     cmds:
       - uv run ruff format .
 
   isort:
     desc: Sort imports with ruff
+    sources:
+      - src/**/*.py
+      - tests/**/*.py
     cmds:
       - uv run ruff check --select I --fix .
 
   typecheck:
-    desc: Check types with mypy
+    desc: Check types with ty
+    sources:
+      - src/**/*.py
+      - tests/**/*.py
     cmds:
-      - uv run mypy .
+      - uv run ty check
+
+  sync:
+    desc: Install dependencies
+    sources:
+      - pyproject.toml
+    generates:
+      - uv.lock
+    cmds:
+      - uv sync
 
   serve:
     desc: Start local dev server with hot reload
     cmds:
       - uv run uvicorn mentyx.main:app --host 0.0.0.0 --port 8000 --reload
+    deps:
+      - sync
 
   test:
     desc: Run tests on memory database

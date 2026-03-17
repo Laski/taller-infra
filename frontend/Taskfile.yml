@@ -1,27 +1,47 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 
 version: "3"
-
+method: timestamp
 tasks:
   lint:
     desc: Lint with ESLint
+    sources:
+      - src/**/*.{ts,tsx,js,jsx}
+      - eslint.config.*
     cmds:
       - pnpm exec eslint .
 
   format:
     desc: Format with prettier
+    sources:
+      - src/**/*.{ts,tsx,js,jsx,css}
+      - .prettierrc
     cmds:
       - pnpm exec prettier --write --log-level silent .
 
   typecheck:
     desc: Check TypeScript types
+    sources:
+      - src/**/*.{ts,tsx}
+      - tsconfig*.json
     cmds:
       - pnpm exec tsc --noEmit
+
+  sync:
+    desc: Install dependencies
+    sources:
+      - package.json
+    generates:
+      - pnpm-lock.yaml
+    cmds:
+      - pnpm install
 
   dev:
     desc: Start local dev server (Vite, no Docker)
     cmds:
       - pnpm exec vite
+    deps:
+      - sync
 
   build:
     desc: Build the Docker image

@@ -46,7 +46,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 
 # Do not run as root.
 RUN groupadd --system --gid 999 appuser \
- && useradd --system --gid 999 --uid 999 --create-home appuser
+    && useradd --system --gid 999 --uid 999 --create-home appuser
 WORKDIR /app
 USER appuser
 

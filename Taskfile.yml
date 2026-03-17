@@ -2,6 +2,8 @@
 
 version: "3"
 
+method: timestamp # do not checksum files, just compare timestamps for status
+
 includes:
   backend:
     taskfile: ./backend/Taskfile.yml
@@ -26,9 +28,9 @@ tasks:
   pre-commit:
     desc: Git pre-commit checks
     cmds:
-      - task: format
       - task: lint
       - task: typecheck
+      - task: format
 
   pre-push:
     desc: Git pre-push checks
@@ -39,19 +41,22 @@ tasks:
     desc: Install all dependencies for both frontend and backend
     aliases: [deps]
     cmds:
-      - cd backend && uv sync
-      - cd frontend && pnpm install
+      - task: backend:sync
+      - task: frontend:sync
 
   format-prettier:
-    desc: Format all files with prettier
+    desc: Format all files with prettier (including this Taskfile)
     cmds:
-      - pnpm dlx prettier --write --log-level silent .
+      - frontend/node_modules/.bin/prettier --write --log-level warn .
+    sources:
+      - ./**/*.{ts,tsx,js,jsx,json,md,html,css,scss,yml,yaml}
 
   format:
     desc: Format all projects
     cmds:
       - task: backend:format
       - task: frontend:format
+      - task: format-prettier
 
   lint:
     desc: Lint all projects

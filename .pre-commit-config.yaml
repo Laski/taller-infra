@@ -1,16 +1,58 @@
+# https://prek.j178.dev/
+
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=750"]
+        exclude: ^uv.lock$
+      - id: check-toml
+      - id: check-yaml
+      - id: check-xml
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+      - id: forbid-submodules
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.21.2
+    hooks:
+      - id: pyupgrade
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/AleksaC/terraform-py
+    rev: v1.14.7
+    hooks:
+      - id: tf-fmt
+      - id: tf-validate
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+
   - repo: local
     hooks:
-      - id: pre-commit
-        name: pre-commit
+      - id: task pre-commit
+        name: task pre-commit
         entry: task pre-commit
         language: system
         stages: [pre-commit]
         pass_filenames: false
         always_run: true
 
-      - id: pre-push
-        name: pre-push
+      - id: task pre-push
+        name: task pre-push
         entry: task pre-push
         language: system
         stages: [pre-push]

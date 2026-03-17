@@ -25,7 +25,7 @@ No authentication, sessions, or WebSockets.
 
 ```bash
 task init
-pre-commit install --hook-type pre-commit --hook-type pre-push
+prek install
 task up
 ```
 
