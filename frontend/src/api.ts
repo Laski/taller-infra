@@ -52,5 +52,6 @@ export async function getSummary(): Promise<VoteSummary> {
 
 export async function deleteQuestion(): Promise<void> {
   const res = await fetch(`${BASE}/question`, { method: 'DELETE' });
+  if (res.status === 404) return; // already gone — treat as success
   if (!res.ok) throw new Error(`DELETE /question failed: ${res.status}`);
 }

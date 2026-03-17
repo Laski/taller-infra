@@ -15,6 +15,7 @@ type View = 'loading' | 'setup' | 'voter' | 'wait' | 'results';
 export default function App() {
   const [view, setView] = useState<View>('loading');
   const [question, setQuestion] = useState<Question | null>(null);
+  const [voted, setVoted] = useState(false);
 
   useEffect(() => {
     getQuestion()
@@ -45,7 +46,10 @@ export default function App() {
     );
 
   if (view === 'voter')
-    return <Voter question={question!} onVoted={() => setView('wait')} />;
+    return <Voter question={question!} onVoted={() => { setVoted(true); setView('wait'); }} />;
+
+  if (view === 'wait')
+    return <Wait voted={voted} onClosed={(q) => { setQuestion(q); setView('results'); }} />;
 
   if (view === 'results') {
     const q = question!;
@@ -61,5 +65,5 @@ export default function App() {
     );
   }
 
-  return <Wait />;
+  return null;
 }

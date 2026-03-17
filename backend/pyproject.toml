@@ -15,9 +15,6 @@ dependencies = [
     "uvicorn>=0.42.0",
 ]
 
-[project.scripts]
-mentyx = "mentyx.main:app"
-
 [tool.ruff]
 # Configure Ruff settings
 target-version = "py314"

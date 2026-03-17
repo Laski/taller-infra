@@ -37,20 +37,23 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Minimal image: Python slim + tini + the /venv copied from the build stage.
 FROM python:${BUILD_PYTHON_VERSION}-slim-${DEBIAN_DISTRIBUTION} AS runtime
 
+ARG EXTRA_DEBIAN_PACKAGES=""
+
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && apt-get upgrade --yes && \
-    apt-get install --yes --no-install-recommends tini && \
+    apt-get install --yes --no-install-recommends tini ${EXTRA_DEBIAN_PACKAGES} && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Do not run as root:
-RUN useradd --create-home appuser
+# Do not run as root.
+RUN groupadd --system --gid 999 appuser \
+ && useradd --system --gid 999 --uid 999 --create-home appuser
 WORKDIR /app
 USER appuser
 
 # Copy the virtualenv and the app from the build stage.
 # The --chown ensures the files are owned by appuser, not root.
 COPY --from=build --chown=appuser:appuser /venv /venv
-COPY --from=build --chown=appuser:appuser /app/ /app/
+COPY --from=build --chown=appuser:appuser /app /app
 
 ENV PATH=/venv/bin:$PATH VIRTUAL_ENV=/venv
 

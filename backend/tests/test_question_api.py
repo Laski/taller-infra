@@ -1,5 +1,5 @@
-import pytest
 import httpx
+import pytest
 
 from mentyx.main import app
 

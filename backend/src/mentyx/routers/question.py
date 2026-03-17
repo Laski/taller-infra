@@ -53,5 +53,3 @@ async def delete_question(db: AsyncSession = Depends(get_session)):
     await db.execute(delete(Vote).where(Vote.question_id == question.id))
     await db.delete(question)
     await db.commit()
-
-

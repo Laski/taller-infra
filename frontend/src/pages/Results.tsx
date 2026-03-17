@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { closeQuestion, deleteQuestion, getSummary } from "../api";
+import { closeQuestion, getSummary } from "../api";
 import type { Question, VoteSummary } from "../api";
 
 interface Props {
@@ -29,7 +29,6 @@ export default function Results({ question, onClosed, onNewSurvey }: Props) {
   }
 
   async function handleNewSurvey() {
-    await deleteQuestion();
     onNewSurvey?.();
   }
 

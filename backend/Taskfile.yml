@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  lint:
+    desc: Lint with ruff
+    cmds:
+      - uv run ruff check --fix .
+
+  format:
+    desc: Format with ruff
+    cmds:
+      - uv run ruff format .
+
+  isort:
+    desc: Sort imports with ruff
+    cmds:
+      - uv run ruff check --select I --fix .
+
+  serve:
+    desc: Start local dev server with hot reload
+    cmds:
+      - uv run uvicorn mentyx.main:app --host 0.0.0.0 --port 8000 --reload
+
+  test:
+    desc: Run tests on memory database
+    env:
+      DATABASE_URL: "sqlite+aiosqlite:///:memory:"
+    cmds:
+      - uv run pytest
+
+  test-postgres:
+    desc: Run tests against a real, docker Postgres
+    dotenv: [".env"]
+    cmds:
+      - export DATABASE_URL="postgresql+asyncpg://$DB_USER:$DB_PASSWORD@localhost:5432/$DB_NAME"
+      - docker compose up -d db
+      - defer: docker compose stop db
+      - uv run pytest
+
+  build:
+    desc: Build the Docker image
+    env:
+      BUILD_PYTHON_VERSION:
+        sh: grep -v '^#' .python-version
+      DEBIAN_DISTRIBUTION: "bullseye"
+    cmds:
+      - docker build --build-arg BUILD_PYTHON_VERSION=$BUILD_PYTHON_VERSION --build-arg DEBIAN_DISTRIBUTION=$DEBIAN_DISTRIBUTION -t mentyx-backend .

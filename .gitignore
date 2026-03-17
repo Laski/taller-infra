@@ -22,6 +22,8 @@ wheels/
 .env
 .env.local
 .env.*.local
+backend/.env
+frontend/.env
 
 # Terraform
 .terraform/

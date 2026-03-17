@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+includes:
+  backend:
+    taskfile: ./backend/Taskfile.yml
+    dir: ./backend
+
+tasks:
+  format-yaml:
+    desc: Format all YAML files with prettier
+    cmds:
+      - pnpm dlx prettier --write "**/*.yml" "**/*.yaml" "!**/*lock.yaml"
+
+  up:
+    desc: Build and start the full stack
+    cmds:
+      - docker compose up --build
+
+  test:
+    desc: Run backend tests against Postgres
+    cmds:
+      - task: backend:test-postgres

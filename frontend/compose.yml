@@ -1,0 +1,11 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        # VITE_API_URL is a build-time arg: Vite bakes it into the bundle at compile time
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    environment:
+      PORT: "3000"
+    ports:
+      - "3000:3000"

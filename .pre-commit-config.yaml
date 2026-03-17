@@ -1,0 +1,26 @@
+repos:
+  - repo: local
+    hooks:
+      - id: backend-format
+        name: backend format (ruff)
+        entry: task backend:format
+        language: system
+        files: ^backend/
+        types: [python]
+        pass_filenames: false
+
+      - id: backend-lint
+        name: backend lint (ruff)
+        entry: task backend:lint
+        language: system
+        files: ^backend/
+        types: [python]
+        pass_filenames: false
+
+      - id: format-yaml
+        name: format yaml (prettier)
+        entry: task format-yaml
+        language: system
+        files: \.(yml|yaml)$
+        exclude: .*-lock.yaml$
+        pass_filenames: false
