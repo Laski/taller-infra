@@ -33,7 +33,12 @@ export default function App() {
       .catch(() => setView(isPresenter ? "setup" : "wait"));
   }, []);
 
-  if (view === "loading") return <p>Cargando…</p>;
+  if (view === "loading")
+    return (
+      <div className="page">
+        <p className="loading-text">Cargando…</p>
+      </div>
+    );
 
   if (view === "setup")
     return (
@@ -60,6 +65,10 @@ export default function App() {
     return (
       <Wait
         voted={voted}
+        onOpened={(q) => {
+          setQuestion(q);
+          setView("voter");
+        }}
         onClosed={(q) => {
           setQuestion(q);
           setView("results");

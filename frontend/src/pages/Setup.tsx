@@ -23,17 +23,21 @@ export default function Setup({ onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Nueva encuesta</h1>
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Texto de la pregunta"
-        required
-      />
-      <button type="submit" disabled={loading}>
-        Lanzar encuesta
-      </button>
-    </form>
+    <div className="page">
+      <form className="setup-form" onSubmit={handleSubmit}>
+        <h1 className="setup-title">Nueva encuesta</h1>
+        <input
+          className="setup-input"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Escribí tu pregunta…"
+          required
+          autoFocus
+        />
+        <button className="btn btn-primary" type="submit" disabled={loading}>
+          {loading ? "Lanzando…" : "Lanzar encuesta"}
+        </button>
+      </form>
+    </div>
   );
 }
