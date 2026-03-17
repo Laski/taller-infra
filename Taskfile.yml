@@ -27,9 +27,8 @@ tasks:
     desc: Git pre-commit checks
     cmds:
       - task: format
-      - task: backend:lint
-      #- task: frontend:lint
-      - task: frontend:typecheck
+      - task: lint
+      - task: typecheck
 
   pre-push:
     desc: Git pre-push checks
@@ -49,10 +48,22 @@ tasks:
       - pnpm dlx prettier --write --log-level silent .
 
   format:
-    desc: Format all files
+    desc: Format all projects
     cmds:
       - task: backend:format
       - task: frontend:format
+
+  lint:
+    desc: Lint all projects
+    cmds:
+      - task: backend:lint
+      - task: frontend:lint
+
+  typecheck:
+    desc: Run type checks for all projects
+    cmds:
+      - task: backend:typecheck
+      - task: frontend:typecheck
 
   up:
     desc: Build and start the full stack

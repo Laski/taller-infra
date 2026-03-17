@@ -1,4 +1,5 @@
 import os
+from collections.abc import AsyncGenerator
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
 
@@ -65,7 +66,7 @@ async def override_db():
 
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
-    async def get_test_session() -> AsyncSession:
+    async def get_test_session() -> AsyncGenerator[AsyncSession, None]:
         async with session_factory() as session:
             yield session
 

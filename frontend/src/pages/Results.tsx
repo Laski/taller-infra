@@ -11,17 +11,27 @@ interface Props {
 export default function Results({ question, onClosed, onNewSurvey }: Props) {
   const [summary, setSummary] = useState<VoteSummary | null>(null);
 
-  async function refresh() {
-    setSummary(await getSummary());
-  }
-
   useEffect(() => {
-    refresh();
-    if (question.is_open) {
-      const id = setInterval(refresh, 2000);
-      return () => clearInterval(id);
+    let cancelled = false;
+
+    async function fetchSummary() {
+      const data = await getSummary();
+      if (!cancelled) setSummary(data);
     }
-  }, []);
+
+    fetchSummary();
+
+    if (!question.is_open)
+      return () => {
+        cancelled = true;
+      };
+
+    const id = setInterval(fetchSummary, 2000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [question.is_open]);
 
   async function handleClose() {
     await closeQuestion();

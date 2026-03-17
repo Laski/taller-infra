@@ -1,7 +1,12 @@
 import os
 from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.orm import DeclarativeBase
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://localhost/mentyx")
@@ -13,8 +18,8 @@ class Base(DeclarativeBase):
 
 # Engine is created on the first call to get_session, not at import time.
 # This allows tests to override the dependency without needing asyncpg.
-_engine = None
-_async_session = None
+_engine: AsyncEngine | None = None
+_async_session: async_sessionmaker[AsyncSession] | None = None
 
 
 def get_engine():
@@ -27,5 +32,6 @@ def get_engine():
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     get_engine()
+    assert _async_session is not None
     async with _async_session() as session:
         yield session

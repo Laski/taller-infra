@@ -18,6 +18,11 @@ tasks:
     cmds:
       - uv run ruff check --select I --fix .
 
+  typecheck:
+    desc: Check types with mypy
+    cmds:
+      - uv run mypy .
+
   serve:
     desc: Start local dev server with hot reload
     cmds:

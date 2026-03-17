@@ -11,7 +11,7 @@ tasks:
   format:
     desc: Format with prettier
     cmds:
-      - pnpm exec prettier --write .
+      - pnpm exec prettier --write --log-level silent .
 
   typecheck:
     desc: Check TypeScript types

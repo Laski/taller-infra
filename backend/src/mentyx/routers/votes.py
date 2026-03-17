@@ -35,7 +35,7 @@ async def get_summary(db: AsyncSession = Depends(get_session)):
         .where(Vote.question_id == question.id)
         .group_by(Vote.value)
     )
-    counts_from_db = dict(rows.all())
+    counts_from_db: dict[int, int] = {value: count for value, count in rows.all()}
     # Ensure all values 1-5 are present in the response, even if no votes were cast
     counts = {i: counts_from_db.get(i, 0) for i in range(1, 6)}
     return VoteSummary(counts=counts, total=sum(counts.values()))
