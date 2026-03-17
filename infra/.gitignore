@@ -1,0 +1,14 @@
+# Local state — use remote backend (GCS) in real deployments
+*.tfstate
+*.tfstate.*
+
+# Terraform working directory
+.terraform/
+
+# Variable files with real values (keep only .example)
+terraform.tfvars
+*.auto.tfvars
+
+# Crash logs
+crash.log
+crash.*.log
