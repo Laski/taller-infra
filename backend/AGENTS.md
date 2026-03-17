@@ -18,6 +18,7 @@ La app maneja una única encuesta a la vez. No hay sesiones, no hay usuarios,
 no hay códigos de acceso.
 
 Flujo:
+
 1. El primer visitante ve un formulario para escribir la pregunta.
 2. Al submitear la pregunta, ese visitante pasa a la página de resultados.
 3. Los demás visitantes ven la pregunta y pueden votar con un valor del 1 al 5.
@@ -101,6 +102,7 @@ backend/
 ## Lo que ya existe
 
 El esqueleto del proyecto está creado con `uv`, incluyendo:
+
 - `src/mentyx/main.py`, `database.py`, `models.py`, `schemas.py`
 - `src/mentyx/routers/` y `services/`
 - `tests/conftest.py` con el fixture `override_db`

@@ -47,3 +47,9 @@ tasks:
       DEBIAN_DISTRIBUTION: "bullseye"
     cmds:
       - docker build --build-arg BUILD_PYTHON_VERSION=$BUILD_PYTHON_VERSION --build-arg DEBIAN_DISTRIBUTION=$DEBIAN_DISTRIBUTION -t mentyx-backend .
+
+  up:
+    desc: Build and start the backend with Docker
+    cmds:
+      - task: build
+      - docker compose up backend

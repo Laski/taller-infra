@@ -15,13 +15,13 @@ una base de datos y un frontend separados.
 
 ## Stack general
 
-| Capa       | Tecnología                              |
-|------------|-----------------------------------------|
+| Capa       | Tecnología                                 |
+| ---------- | ------------------------------------------ |
 | Backend    | Python 3.14+, FastAPI, SQLAlchemy, uvicorn |
-| Base datos | PostgreSQL 18                           |
-| Frontend   | React + Vite (TypeScript)               |
-| Local      | docker-compose                          |
-| Infra/nube | Terraform, Google Cloud Run, Cloud SQL  |
+| Base datos | PostgreSQL 18                              |
+| Frontend   | React + Vite (TypeScript)                  |
+| Local      | docker-compose                             |
+| Infra/nube | Terraform, Google Cloud Run, Cloud SQL     |
 
 ---
 

@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { createQuestion } from '../api';
-import type { Question } from '../api';
+import { useState } from "react";
+import { createQuestion } from "../api";
+import type { Question } from "../api";
 
 interface Props {
   onCreated: (question: Question) => void;
 }
 
 export default function Setup({ onCreated }: Props) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {

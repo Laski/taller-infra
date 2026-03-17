@@ -58,5 +58,6 @@ No hace polling.
 
 **Results** — muestra cuántos votos recibió cada valor (1 a 5).
 Tiene dos botones:
+
 - "Actualizar" → llama `GET /votes/summary` y re-renderiza
 - "Cerrar encuesta" → llama `PATCH /question/close` y redirige a Wait

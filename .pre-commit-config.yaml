@@ -1,26 +1,18 @@
 repos:
   - repo: local
     hooks:
-      - id: backend-format
-        name: backend format (ruff)
-        entry: task backend:format
+      - id: pre-commit
+        name: pre-commit
+        entry: task pre-commit
         language: system
-        files: ^backend/
-        types: [python]
+        stages: [pre-commit]
         pass_filenames: false
+        always_run: true
 
-      - id: backend-lint
-        name: backend lint (ruff)
-        entry: task backend:lint
+      - id: pre-push
+        name: pre-push
+        entry: task pre-push
         language: system
-        files: ^backend/
-        types: [python]
+        stages: [pre-push]
         pass_filenames: false
-
-      - id: format-yaml
-        name: format yaml (prettier)
-        entry: task format-yaml
-        language: system
-        files: \.(yml|yaml)$
-        exclude: .*-lock.yaml$
-        pass_filenames: false
+        always_run: true

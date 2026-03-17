@@ -13,37 +13,62 @@ No authentication, sessions, or WebSockets.
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Backend | Python 3.14 · FastAPI · SQLAlchemy 2.0 async · uvicorn |
-| Database | PostgreSQL 18 |
-| Frontend | React 19 · Vite · TypeScript · nginx |
-| Local dev | Docker Compose |
-| Cloud | Google Cloud Run · Cloud SQL · Terraform |
+| Layer     | Technology                                             |
+| --------- | ------------------------------------------------------ |
+| Backend   | Python 3.14 · FastAPI · SQLAlchemy 2.0 async · uvicorn |
+| Database  | PostgreSQL 18                                          |
+| Frontend  | React 19 · Vite · TypeScript · nginx                   |
+| Local dev | Docker Compose · Task                                  |
+| Cloud     | Google Cloud Run · Cloud SQL · Terraform               |
 
-## Running locally
+## Getting started
 
 ```bash
-cp .env.example .env          # optional. defaults work out of the box
-docker compose up --build
+pre-commit install # install git hooks
+task init          # copies .env.example → .env for each sub-project
+task up            # build and start the full stack with docker-compose
 ```
 
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:3000 |
+| Service     | URL                   |
+| ----------- | --------------------- |
+| Frontend    | http://localhost:3000 |
 | Backend API | http://localhost:8000 |
-| Postgres | localhost:5432 |
+| Postgres    | localhost:5432        |
+
+Each sub-project can also be run independently:
+
+```bash
+cd backend && task up   # db + backend only
+cd frontend && task up  # frontend only
+```
+
+## Task
+
+```
+task init          Set up env files
+task up            Build and start the full stack
+task test          Run backend tests against Postgres
+task pre-commit    Lint + format checks (also runs on git commit)
+task format-yaml   Format all YAML files with prettier
+
+task backend:test          Tests against SQLite in-memory
+task backend:test-postgres Tests against real Postgres
+task backend:lint          Ruff lint
+task backend:format        Ruff format
+task backend:serve         Local dev server with hot reload
+task backend:build         Build the Docker image
+```
 
 ## Environment variables
 
-See [`.env.example`](.env.example). Compose reads `.env` automatically.
+Each sub-project has its own `.env.example`. `task init` copies them to `.env`.
 
-| Variable | Used by | Notes |
-|---|---|---|
-| `DB_USER` | compose → postgres + backend | default: `mentyx` |
-| `DB_PASSWORD` | compose → postgres + backend | default: `mentyx` |
-| `DB_NAME` | compose → postgres + backend | default: `mentyx` |
-| `VITE_API_URL` | frontend build | URL the browser uses to reach the backend |
+| File            | Variables                           |
+| --------------- | ----------------------------------- |
+| `backend/.env`  | `DB_USER`, `DB_PASSWORD`, `DB_NAME` |
+| `frontend/.env` | `VITE_API_URL`                      |
+
+The root `compose.yml` reads each sub-project's `.env` via `include.env_file`.
 
 For Cloud Run: `DATABASE_URL` goes into Secret Manager; `PORT` is injected by the platform; `VITE_API_URL` is set as a Terraform variable at build time.
 
@@ -60,12 +85,7 @@ backend/src/mentyx/
     votes.py       POST /votes, GET /votes/summary
 ```
 
-Run tests:
-
-```bash
-cd backend
-uv run pytest
-```
+Tests use SQLite in-memory by default; `task backend:test-postgres` runs against a real Postgres container.
 
 ## Frontend
 
@@ -76,17 +96,22 @@ frontend/src/
   pages/
     Setup.tsx      Create a question
     Voter.tsx      Cast a vote
-    Wait.tsx       Post-vote holding screen
-    Results.tsx    Live results + close/reset controls
+    Wait.tsx       Post-vote holding screen + polls until survey closes
+    Results.tsx    Live results (polls every 2s while open) + close/reset controls
 ```
 
 ## Project structure
 
 ```
 taller-infra/
-├── compose.yml
-├── .env.example
+├── Taskfile.yml
+├── compose.yml          includes backend/compose.yml + frontend/compose.yml
 ├── backend/
+│   ├── compose.yml      db + backend services
+│   ├── Taskfile.yml
+│   └── src/mentyx/
 ├── frontend/
-└── infra/          Terraform — built during the workshop
+│   ├── compose.yml      frontend service
+│   └── src/
+└── infra/               Terraform — built during the workshop
 ```

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { castVote } from '../api';
-import type { Question } from '../api';
+import { useState } from "react";
+import { castVote } from "../api";
+import type { Question } from "../api";
 
 interface Props {
   question: Question;

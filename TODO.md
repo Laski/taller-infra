@@ -1,2 +1,2 @@
 - No hay migraciones (alembic?)
-- El CORS=* es para desarrollo, no para producción. En producción se debería configurar con el dominio del frontend.
+- El CORS=\* es para desarrollo, no para producción. En producción se debería configurar con el dominio del frontend.

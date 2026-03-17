@@ -8,10 +8,42 @@ includes:
     dir: ./backend
 
 tasks:
-  format-yaml:
-    desc: Format all YAML files with prettier
+  init:
+    desc: Set up the project for first use (env files)
     cmds:
-      - pnpm dlx prettier --write "**/*.yml" "**/*.yaml" "!**/*lock.yaml"
+      - cp -n backend/.env.example backend/.env
+      - cp -n frontend/.env.example frontend/.env
+      - command -v uv || brew install uv
+      - command -v pnpm || npm install -g pnpm
+      - cd backend && uv sync
+    status:
+      - test -f backend/.env
+      - test -f frontend/.env
+
+  pre-commit:
+    desc: Git pre-commit checks
+    cmds:
+      - task: backend:format
+      - task: backend:lint
+      - task: backend:isort
+      - task: format-prettier
+
+  pre-push:
+    desc: Git pre-push checks
+    cmds:
+      - task: test
+
+  sync:
+    desc: Install all dependencies for both frontend and backend
+    aliases: [deps]
+    cmds:
+      - cd backend && uv sync
+      - cd frontend && pnpm install
+
+  format-prettier:
+    desc: Format all files with prettier
+    cmds:
+      - pnpm dlx prettier --write --log-level silent .
 
   up:
     desc: Build and start the full stack
@@ -19,6 +51,7 @@ tasks:
       - docker compose up --build
 
   test:
-    desc: Run backend tests against Postgres
+    desc: Run backend tests both with and without postgres
     cmds:
+      - task: backend:test
       - task: backend:test-postgres

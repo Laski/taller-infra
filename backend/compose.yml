@@ -1,4 +1,28 @@
 services:
+  backend:
+    build:
+      context: .
+    image: mentyx-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-mentyx}:${DB_PASSWORD:-mentyx}@db:5432/${DB_NAME:-mentyx}
+      PORT: "8000"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        - "CMD"
+        - "python"
+        - "-c"
+        - "import urllib.request; urllib.request.urlopen('http://localhost:$$PORT/health')"
+      start_period: 30s
+      start_interval: 1s
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:18.3
     environment:
@@ -17,31 +41,6 @@ services:
       interval: 30s
       timeout: 5s
       retries: 5
-
-  backend:
-    build:
-      context: .
-    environment:
-      DATABASE_URL: postgresql+asyncpg://${DB_USER:-mentyx}:${DB_PASSWORD:-mentyx}@db:5432/${DB_NAME:-mentyx}
-      PORT: "8000"
-    ports:
-      - "8000:8000"
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "python",
-          "-c",
-          "import urllib.request; urllib.request.urlopen('http://localhost:$$PORT/health')",
-        ]
-      start_period: 30s
-      start_interval: 1s
-      interval: 30s
-      timeout: 5s
-      retries: 5
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   postgres_data:
