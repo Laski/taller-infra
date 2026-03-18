@@ -3,7 +3,7 @@ locals {
   image_base_path          = "${google_artifact_registry_repository.images.location}-docker.pkg.dev/${google_artifact_registry_repository.images.project}/${google_artifact_registry_repository.images.repository_id}"
   backend_image_full_path  = "${local.image_base_path}/backend"
   frontend_image_full_path = "${local.image_base_path}/frontend"
-  database_url             = "postgresql+asyncpg://${google_sql_user.app_user.name}:${google_sql_user.app_user.password}@/${google_sql_database.app_db.name}?host=/cloudsql/${google_sql_database_instance.postgres.connection_name}"
+  database_url             = "postgresql+asyncpg://${google_sql_user.app_user.name}:${random_password.db_password.result}@/${google_sql_database.app_db.name}?host=/cloudsql/${google_sql_database_instance.postgres.connection_name}"
 }
 
 # Backend Cloud Run service

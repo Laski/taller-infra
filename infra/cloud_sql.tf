@@ -1,6 +1,7 @@
 resource "google_sql_database_instance" "postgres" {
-  name             = var.app_name
-  database_version = "POSTGRES_18"
+  name                = var.app_name
+  database_version    = "POSTGRES_18"
+  deletion_protection = true
 
   settings {
     tier              = var.db_tier
@@ -22,6 +23,6 @@ resource "google_sql_user" "app_user" {
 }
 
 resource "random_password" "db_password" {
-  length  = 16
-  special = true
+  length  = 32
+  special = false
 }

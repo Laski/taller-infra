@@ -21,6 +21,22 @@ No authentication, sessions, or WebSockets.
 | Local dev | Docker Compose · Task                                  |
 | Cloud     | Google Cloud Run · Cloud SQL · Terraform               |
 
+## Dependencies
+
+You can install almost all deps with Homebrew:
+
+```bash
+brew install uv node task prek pnpm jq
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+brew install --cask gcloud-cli
+```
+
+You will also need Docker:
+https://docs.docker.com/engine/install/
+
+TODO: Create a mise env to automate all instalation.
+
 ## Getting started
 
 ```bash
@@ -44,14 +60,22 @@ cd frontend && task up  # frontend only
 
 ## Task
 
+Running
+
 ```
-task init              Set up env files + install deps
-task sync              Install all dependencies (uv + pnpm)
-task up                Build and start the full stack
-task test              Run all backend tests (SQLite + Postgres)
-task pre-commit        Lint + format (runs on git commit)
-task pre-push          Full test suite (runs on git push)
-task format-prettier   Format all files with prettier
+task --list
+```
+
+will show all available tasks:
+
+```
+task init                  Set up env files + install deps
+task sync                  Install all dependencies (uv + pnpm)
+task up                    Build and start the full stack locally
+task test                  Run all backend tests (SQLite + Postgres)
+task pre-commit            Lint + format (runs on git commit)
+task pre-push              Full test suite (runs on git push)
+task format-prettier       Format all files with prettier
 
 task backend:test          Tests against SQLite in-memory
 task backend:test-postgres Tests against real Postgres
@@ -59,6 +83,18 @@ task backend:lint          Ruff lint
 task backend:format        Ruff format + isort
 task backend:serve         Local dev server with hot reload
 task backend:build         Build the Docker image
+
+task frontend:lint         ESLint
+task frontend:format       Prettier
+task frontend:serve        Local dev server with hot reload
+task frontend:build        Build the Docker image
+
+task infra:setup           Copy example vars and initialize Terraform
+task infra:lint            Validate Terraform configuration
+task infra:format          Format all Terraform files
+task infra:apply           Apply Terraform configuration
+task infra:deploy          Applies the infrastructure, builds and deploys both backend and frontend
+task infra:destroy         Destroy all managed infrastructure
 ```
 
 ## Environment variables
@@ -70,50 +106,10 @@ Each sub-project has its own `.env.example`. `task init` copies them to `.env`.
 | `backend/.env`  | `DB_USER`, `DB_PASSWORD`, `DB_NAME` |
 | `frontend/.env` | `VITE_API_URL`                      |
 
-The root `compose.yml` reads each sub-project's `.env` via `include.env_file`.
+The root `compose.yml` reads each sub-project's `.env`.
 
 For Cloud Run: `DATABASE_URL` goes into Secret Manager; `PORT` is injected by the platform; `VITE_API_URL` is set as a Terraform variable at build time.
 
 ## Backend
 
-```
-backend/src/mentyx/
-  main.py          FastAPI app + lifespan (creates tables on startup)
-  database.py      Async SQLAlchemy engine (lazy init)
-  models.py        Question, Vote
-  schemas.py       Pydantic schemas
-  routers/
-    question.py    GET/POST /question, PATCH /question/close, DELETE /question
-    votes.py       POST /votes, GET /votes/summary
-```
-
 Tests use SQLite in-memory by default; `task backend:test-postgres` runs against a real Postgres container.
-
-## Frontend
-
-```
-frontend/src/
-  App.tsx          URL-based routing: /new → presenter, / → voter
-  api.ts           Typed HTTP client
-  pages/
-    Setup.tsx      Create a question
-    Voter.tsx      Cast a vote
-    Wait.tsx       Post-vote holding screen + polls until survey closes
-    Results.tsx    Live results (polls every 2s while open) + close/reset controls
-```
-
-## Project structure
-
-```
-taller-infra/
-├── Taskfile.yml
-├── compose.yml          includes backend/compose.yml + frontend/compose.yml
-├── backend/
-│   ├── compose.yml      db + backend services
-│   ├── Taskfile.yml
-│   └── src/mentyx/
-├── frontend/
-│   ├── compose.yml      frontend service
-│   └── src/
-└── infra/               Terraform — built during the workshop
-```

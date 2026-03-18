@@ -24,9 +24,6 @@ tasks:
     desc: Apply infrastructure changes
     cmds:
       - terraform apply -var-file=terraform.tfvars
-    sources:
-      - ./**/*.tf
-      - ./**/*.tfvars
 
   destroy:
     desc: Destroy all managed infrastructure
