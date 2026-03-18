@@ -1,3 +1,5 @@
+name: mentyx
+
 include:
   - path: backend/compose.yml
     env_file: backend/.env

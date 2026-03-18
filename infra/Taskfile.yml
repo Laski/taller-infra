@@ -82,6 +82,8 @@ tasks:
         --image {{.IMAGE}}:{{.TAG}}
         --region {{.REGION}}
         --project {{.PROJECT}}
+    sources:
+      - "{{.CONTEXT}}/**/*"
 
   docker-auth:
     desc: Authenticate Docker with Artifact Registry
@@ -114,6 +116,8 @@ tasks:
           TAG: "{{.TAG}}"
           SERVICE_KEY: backend
           CONTEXT: ../backend
+    sources:
+      - ../backend/**/*
 
   deploy-frontend:
     desc: Build, push, and deploy the frontend image (tag = git short SHA)
@@ -132,6 +136,8 @@ tasks:
           SERVICE_KEY: frontend
           CONTEXT: ../frontend
           BUILD_ARGS: "--build-arg VITE_API_URL={{.BACKEND_URL}}"
+    sources:
+      - ../frontend/**/*
 
   # Meta-task: reads TF outputs once, deploys both services
   deploy:
@@ -157,3 +163,6 @@ tasks:
           SERVICE_KEY: frontend
           CONTEXT: ../frontend
           BUILD_ARGS: "--build-arg VITE_API_URL={{.BACKEND_URL}}"
+    sources:
+      - ../backend/**/*
+      - ../frontend/**/*

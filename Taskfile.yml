@@ -83,8 +83,24 @@ tasks:
     cmds:
       - docker compose up --build
 
+  down:
+    desc: Stop the stack
+    cmds:
+      - docker compose down
+
+  pull:
+    desc: Pull latest base images for both frontend and backend
+    cmds:
+      - docker compose pull
+
   test:
     desc: Run backend tests both with and without postgres
     cmds:
       - task: backend:test
       - task: backend:test-postgres
+
+  deploy:
+    desc: Deploy the full stack to GCP
+    cmds:
+      - task: infra:apply
+      - task: infra:deploy

@@ -40,7 +40,12 @@ resource "google_cloud_run_v2_service" "backend" {
 
   # Image is managed by `task infra:deploy-*`, not by Terraform
   lifecycle {
-    ignore_changes = [template[0].containers[0].image, client, client_version]
+    ignore_changes = [
+      template[0].containers[0].name,
+      template[0].containers[0].image,
+      client,
+      client_version
+    ]
   }
 
   depends_on = [
@@ -77,7 +82,12 @@ resource "google_cloud_run_v2_service" "frontend" {
 
   # Image is managed by `task infra:deploy-*`, not by Terraform
   lifecycle {
-    ignore_changes = [template[0].containers[0].image, client, client_version]
+    ignore_changes = [
+      template[0].containers[0].name,
+      template[0].containers[0].image,
+      client,
+      client_version
+    ]
   }
 
   depends_on = [

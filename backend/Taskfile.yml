@@ -72,12 +72,17 @@ tasks:
     env:
       BUILD_PYTHON_VERSION:
         sh: grep -v '^#' .python-version
-      DEBIAN_DISTRIBUTION: "bullseye"
+      DEBIAN_DISTRIBUTION: "trixie"
     cmds:
-      - docker build --build-arg BUILD_PYTHON_VERSION=$BUILD_PYTHON_VERSION --build-arg DEBIAN_DISTRIBUTION=$DEBIAN_DISTRIBUTION -t mentyx-backend .
+      - docker compose build --build-arg PYTHON_VERSION=${BUILD_PYTHON_VERSION} --build-arg DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION} backend
 
   up:
     desc: Build and start the backend with Docker
     cmds:
       - task: build
-      - docker compose up backend
+      - docker compose up -d
+
+  down:
+    desc: Stop the backend container
+    cmds:
+      - docker compose down

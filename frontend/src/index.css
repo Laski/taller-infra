@@ -222,10 +222,12 @@ code {
 .voter-buttons {
   display: flex;
   gap: 0.75rem;
+  width: 100%;
 }
 .vote-btn {
-  width: 68px;
-  height: 68px;
+  flex: 1;
+  aspect-ratio: 1;
+  max-width: 68px;
   border-radius: 18px;
   border: none;
   font-size: 1.6rem;
@@ -384,6 +386,28 @@ code {
   flex-wrap: wrap;
   justify-content: center;
 }
+/* ─── QR code block ──────────────────────────────────── */
+.qr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg);
+}
+.qr-block svg {
+  display: block;
+  border-radius: 8px;
+}
+.qr-label {
+  font-size: 0.8rem;
+  color: var(--text);
+  margin: 0;
+  font-family: var(--mono);
+}
+
 .loading-text {
   color: var(--text);
   animation: blink 1.4s ease-in-out infinite alternate;

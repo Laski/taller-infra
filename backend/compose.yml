@@ -1,8 +1,9 @@
+name: mentyx
+
 services:
   backend:
     build:
       context: .
-    image: mentyx-backend
     environment:
       DATABASE_URL: postgresql+asyncpg://${DB_USER:-mentyx}:${DB_PASSWORD:-mentyx}@db:5432/${DB_NAME:-mentyx}
       PORT: "8000"

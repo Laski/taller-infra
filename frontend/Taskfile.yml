@@ -53,3 +53,8 @@ tasks:
     cmds:
       - task: build
       - docker compose up
+
+  down:
+    desc: Stop the frontend container
+    cmds:
+      - docker compose down

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { closeQuestion, getSummary } from "../api";
 import type { Question, VoteSummary } from "../api";
+
+const VOTER_URL = `${window.location.origin}/`;
 
 interface Props {
   question: Question;
@@ -94,6 +97,13 @@ export default function Results({ question, onClosed, onNewSurvey }: Props) {
           </>
         ) : (
           <p className="loading-text">Cargando resultados…</p>
+        )}
+
+        {onClosed && (
+          <div className="qr-block">
+            <QRCodeSVG value={VOTER_URL} size={160} />
+            <p className="qr-label">{VOTER_URL}</p>
+          </div>
         )}
 
         <div className="results-actions">
