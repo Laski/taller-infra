@@ -2,8 +2,6 @@
 
 version: "3"
 
-method: timestamp # do not checksum files, just compare timestamps for status
-
 tasks:
   # ── Terraform ────────────────────────────────────────────────────────────────
 
