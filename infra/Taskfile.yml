@@ -137,30 +137,9 @@ tasks:
     sources:
       - ../frontend/**/*
 
-  # Meta-task: reads TF outputs once, deploys both services
+  # Meta-task: deploy both services with one command
   deploy:
     desc: Build and deploy both backend and frontend
-    vars:
-      TAG:
-        sh: git rev-parse --short HEAD
-      TF_OUT:
-        sh: terraform output -json
-      BACKEND_URL:
-        sh: echo '{{.TF_OUT}}' | jq -r .backend_url.value
-    cmds:
-      - task: _deploy
-        vars:
-          TF_OUT: "{{.TF_OUT}}"
-          TAG: "{{.TAG}}"
-          SERVICE_KEY: backend
-          CONTEXT: ../backend
-      - task: _deploy
-        vars:
-          TF_OUT: "{{.TF_OUT}}"
-          TAG: "{{.TAG}}"
-          SERVICE_KEY: frontend
-          CONTEXT: ../frontend
-          BUILD_ARGS: "--build-arg VITE_API_URL={{.BACKEND_URL}}"
-    sources:
-      - ../backend/**/*
-      - ../frontend/**/*
+    deps:
+      - deploy-backend
+      - deploy-frontend
