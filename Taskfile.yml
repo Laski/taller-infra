@@ -53,7 +53,7 @@ tasks:
     cmds:
       - frontend/node_modules/.bin/prettier --write --log-level warn .
     sources:
-      - ./**/*.{ts,tsx,js,jsx,json,md,html,css,scss,yml,yaml}
+      - ./**/*.{ts,tsx,js,jsx,json,md,html,css,scss,yml,yaml,toml}
 
   format:
     desc: Format all projects

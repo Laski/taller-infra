@@ -1,24 +1,31 @@
-# Control de versiones
+# Version control
 .git/
 .gitignore
 
-# Docs y config que no van al contenedor
+# Docs and config
 AGENTS.md
 Dockerfile
 .dockerignore
 
-
-# Entornos virtuales locales
+# Virtualenvs
 .venv/
 venv/
 
-# Bytecode y artefactos de Python
+# Bytecode and caches
 .pytest_cache/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Variables de entorno locales (nunca al contenedor)
+# Environment variables
 .env
 .env.*
+
+# Tests
+tests/
+test_*.py
+
+# IDE stuff
+.vscode/
+.idea/
